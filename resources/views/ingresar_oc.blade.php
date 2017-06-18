@@ -1,129 +1,174 @@
-@extends('layouts.app')
+@extends('layouts.layout')
 
 @section('content')
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-2">
-                <ul class="nav nav-pills">
-                <li role="presentation" class="active"><a href="{{ url('/ingresar_oc') }}">Ingresar OC</a></li>
-                </ul>
-            </div>
-            <div class="col-md-8">
+        <div class="panel panel-default col-md-10">
+            <div class="panel-heading">Ordenes de Compra</div>
+            <div class="panel-body">
                 <div class="row">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Ordenes de Compra</div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-sm-2"></div>
-                                <div id="alert" class="alert col-sm-8" hidden>
-                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                    <div id="message">Success!</div>
-                                </div>
-                                <div class="col-sm-2"></div>
+                    <div class="col-sm-2"></div>
+                    <div id="alert" class="alert col-sm-8" hidden>
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <div id="message">Success!</div>
+                    </div>
+                    <div class="col-sm-2"></div>
+                </div>
+                {!! Form::open(['url' => '/procesar_oc', 'id' => 'orden_compra_form', 'class' => 'form-horizontal']) !!}
+                    <div class="form-group">
+                        {{-- IS NEW PROYECTO? --}}
+                        <div class="col-xs-4">
+                            {!! Form::checkbox('is_new_project',1, true,['id' => 'is_new_project']) !!}
+                            {!! Form::label('is_new_project', '¿Proyecto Nuevo?') !!}
+                        </div>
+                        {{-- IS NEW PROVEEDOR ? --}}
+                        <div class="col-xs-4">
+                            {!! Form::checkbox('is_new_proveedor',1, true,['id' => 'is_new_proveedor']) !!}
+                            {!! Form::label('is_new_proveedor', '¿Nuevo Proveedor?') !!}
+                        </div>
+                        {{-- ¿FACTURA EXENTA? --}}
+                        <div class="col-xs-4">
+                            {!! Form::checkbox('factura_exenta',1, false) !!}
+                            {!! Form::label('factura_exenta', '¿Factura Exenta?', ['class' => 'awesome']) !!}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {{-- ID PROYECTO --}}
+                        <div class="col-xs-4" id="container_id_proyecto" hidden>
+                            {!! Form::label('id_proyecto', 'Proyecto') !!}
+                            {!! Form::select('id_proyecto', $listaProyectos, null, ['id'=>'id_proyecto','placeholder' => 'Seleccione...','class' => 'form-control']) !!}
+                        </div>
+                        {{-- CODIGO PROYECTO --}}
+                        <div class="col-xs-4" id="container_codigo_proyecto" >
+                            {!! Form::label('codigo_proyecto', 'Código Proyecto') !!}
+                            {!! Form::text('codigo_proyecto', null, ['class' => 'form-control','required']) !!}
+                        </div>
+                        {{--NOMBRE PROVEEDOR--}}
+                        <div class="col-xs-4" >
+                            {!! Form::label('nombre', 'Nombre Proveedor') !!}
+                            {!! Form::text('nombre','',array('class' => 'form-control','required')) !!}
+                        </div>
+                        {{-- ID PROVEEDOR --}}
+                        <div class="col-xs-4" >
+                            <div id="container_id_proveedor" hidden >
+                                {!! Form::label('id_proveedor', 'Proveedor') !!}
+                                {!! Form::select('id_proveedor', $listaProveedores, null, ['id'=>'id_proveedor','placeholder' => 'Seleccione...','class' => 'form-control']) !!}
                             </div>
-                            <form id="orden_compra_form" action="{{ url('/procesar_oc') }}" method="POST">
-                                {{ csrf_field() }}
-                                <div class="row">
-                                    <div class="col-sm-2"></div>
-                                    {{--PRODUCTO--}}
-                                    <div class="form-group col-sm-4">
-                                        <label for="id_producto">Producto:</label>
-                                        <select class="form-control input-sm selec2" id="id_producto" name="id_producto" required placeholder="Seleccione...">
-                                            <option value="">Seleccione</option>
-                                            <option value="1">test</option>
-                                        </select>
-                                    </div>
-                                    {{--CANTIDAD--}}
-                                    <div class="form-group col-sm-4">
-                                        <label for="cantidad">Cantidad:</label>
-                                        <input name="cantidad" class="form-control input-sm" required="true" size="150" maxlength="45" type="number">
-                                    </div>
-                                    <div class="col-sm-2"></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-2"></div>
-                                    {{--VALOR NETO--}}
-                                    <div class="form-group col-sm-4">
-                                        <label for="valor_neto">Valor Neto:</label>
-                                        <input name="valor_neto" id="valor_neto" class="form-control input-sm" required="true" size="150" maxlength="45" type="number">
-                                    </div>
-                                    {{--VALOR BRUTO--}}
-                                    <div class="form-group col-sm-4">
-                                        <label for="valor_bruto">Valor Bruto:</label>
-                                        <input name="valor_bruto" id="valor_bruto" class="form-control input-sm" required="true" size="150"  maxlength="45" type="number">
-                                    </div>
-                                    <div class="col-sm-2"></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-2"></div>
-                                    {{--COTIZACION 1--}}
-                                    <div class="form-group col-sm-4">
-                                        <label for="producto">Cotización 1:</label>
-                                        <input name="cotizacion_1" id="cotizacion_1" class="form-control input-sm" required="true" size="150"  maxlength="45" type="number">
-                                    </div>
-                                    {{--COTIZACION 2--}}
-                                    <div class="form-group col-sm-4">
-                                        <label for="producto">Cotización 2:</label>
-                                        <input name="cotizacion_2" id="cotizacion_2" class="form-control input-sm" required="true" size="150" maxlength="45" type="number">
-                                    </div>
-                                    <div class="col-sm-2"></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-2"></div>
-                                    {{--COTIZACION 3--}}
-                                    <div class="form-group col-sm-4">
-                                        <label for="cotizacion_3">Cotización 3:</label>
-                                        <input name="cotizacion_3" id="cotizacion_3" class="form-control input-sm" required="true" size="150" maxlength="45" type="number">
-                                    </div>
-                                    {{--IVA--}}
-                                    <div class="form-group col-sm-4">
-                                        <label for="iva">IVA:</label>
-                                        <input name="iva" id="iva" class="form-control input-sm" required="true" size="150" min="0" max="100" type="number" >
-                                    </div>
-                                    <div class="col-sm-2"></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-2"></div>
-                                    {{--AUTORIZADA--}}
-                                    <div class="form-group col-sm-4">
-                                        <label for="autorizada">Autorizada:</label>
-                                        <input name="autorizada" id="autorizada" class="form-control input-sm" required="true" size="150" maxlength="45" type="text">
-                                    </div>
-                                    {{--FACTURADA--}}
-                                    <div class="form-group col-sm-4">
-                                        <label for="facturada">Facturada:</label>
-                                        <select class="form-control input-sm selec2" id="facturada" name="facturada" placeholder="Seleccione" required>
-                                            <option value="">Seleccione</option>
-                                            <option value="1">Si</option>
-                                            <option value="1">no</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-2"></div>
-                                </div>
-                                <div class="row">
-                                    {{--comentario--}}
-                                    <div class="col-sm-2"></div>
-                                    <div class="form-group col-sm-8">
-                                        <label for="autorizada">Comentario:</label>
-                                        <textarea name="comentario" id="comentario" class="form-control input-sm" required="true" rows="2" cols="30" max_length="100" maxlength="100">
-                                        </textarea>
-                                    </div>
-                                    <div class="col-sm-2"></div>
-                                </div>
-                                <div class="row text-center">
-                                    <button id="bnt_submit_orden_compra" type="submit" class="btn btn-success">Guardar</button>
-                                </div>
-                            </form>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="panel panel-default" id="container_grilla_oc" hidden>
-                        <div class="panel-body">
-                            <div id="grilla_oc"></div>
+                    <div class="form-group">
+                        {{--DIRECCION--}}
+                        <div class="col-xs-4">
+                            {!! Form::label('direccion', 'Direccion', ['class' => 'awesome']) !!}
+                            {!! Form::text('direccion','',['class' => 'form-control','required' ]) !!}
+                        </div>
+                        {{--RUT--}}
+                        <div class="col-xs-4">
+                            {!! Form::label('rut', 'RUT', ['class' => 'awesome']) !!}
+                            {!! Form::text('rut','',['class' => 'form-control','required' ]) !!}
                         </div>
                     </div>
-                </div>
+                    <div class="form-group">
+                        {{--COMUNA--}}
+                        <div class="col-xs-4">
+                            {!! Form::label('comuna', 'Comuna', ['class' => 'awesome']) !!}
+                            {!! Form::text('comuna','',['class' => 'form-control','required' ]) !!}
+                        </div>
+                        {{--GIRO--}}
+                        <div class="col-xs-4">
+                            {!! Form::label('giro', 'Giro', ['class' => 'awesome']) !!}
+                            {!! Form::text('giro','',['class' => 'form-control','required' ]) !!}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {{--FECHA EMISION--}}
+                        <div class="col-xs-4">
+                            {!! Form::label('fecha_emision', 'Fecha Emisión', ['class' => 'awesome']) !!}
+                            {!! Form::date('fecha_emision', \Carbon\Carbon::now(),['class' => 'form-control','required']) !!}
+                        </div>
+                        {{--EMAIL--}}
+                        <div class="col-xs-4">
+                            {!! Form::label('email', 'Email') !!}
+                            {!! Form::email('email','', ['class' => 'form-control','required']) !!}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {{--FORMA PAGO--}}
+                        <div class="col-xs-4">
+                            {!! Form::label('id_tipo_pago', 'Forma Pago', ['class' => 'awesome']) !!}
+                            {!! Form::select('id_tipo_pago', $listaFormaPago, null, ['placeholder' => 'Seleccione...','class' => 'form-control','required']) !!}
+                        </div>
+                        {{--TELÉFONO FIJO--}}
+                        <div class="col-xs-4">
+                            {!! Form::label('telefono_fijo', 'Teléfono Fijo', ['class' => 'awesome']) !!}
+                            {!! Form::number('telefono_fijo','',['class' => 'form-control','required','maxlength' => 9 ]) !!}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {{--TELÉFONO MOVIL--}}
+                        <div class="col-xs-4">
+                            {!! Form::label('telefono_movil', 'Teléfono Movil', ['class' => 'awesome']) !!}
+                            {!! Form::number('telefono_movil','',['class' => 'form-control' ]) !!}
+                        </div>
+                        {{--PLAZO ENTRAGA--}}
+                        <div class="col-xs-4">
+                            {!! Form::label('plazo_entrega', 'Plazo Entrega', ['class' => 'awesome']) !!}
+                            {!! Form::text('plazo_entrega','',['class' => 'form-control','required' ]) !!}
+                        </div>
+                        {{--SUBMIT--}}
+                        <div class="col-xs-4">
+                            </br>{!! Form::submit('Generar OC',['class' => 'btn btn-success']) !!}
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div id="container_detalle_oc" class="panel-body">
+                            <div class="form-group">
+                                <div class="col-xs-1">
+                                    {!! Form::label('detalle[0][codigo]', 'Código') !!}
+                                    {!! Form::text('detalle[0][codigo]','',['class' => 'form-control','required' ]) !!}
+                                </div>
+                                <div class="col-xs-1">
+                                    {!! Form::label('detalle[0][cantidad]', 'Cantidad') !!}
+                                    {!! Form::number('detalle[0][cantidad]','',['id'=>'detalle_0_cantidad','class' => 'form-control detalle_oc','required','data-row' => 0,'min' => 0]) !!}
+                                </div>
+                                <div class="col-xs-5">
+                                    {!! Form::label('detalle[0][item]', 'Item') !!}
+                                    {!! Form::text('detalle[0][item]','',['class' => 'form-control','required' ]) !!}
+                                </div>
+                                <div class="col-xs-2">
+                                    {!! Form::label('detalle[0][valor_unitario]', 'Valor Unitario') !!}
+                                    {!! Form::number('detalle[0][valor_unitario]','',['id'=>'detalle_0_valor_unitario','class' => 'form-control detalle_oc','required','data-row' => 0,'min' => 0]) !!}
+                                </div>
+                                <div class="col-xs-2">
+                                    {!! Form::label('detalle[0][valor_total]', 'Valor Total') !!}
+                                    {!! Form::number('detalle[0][valor_total]','',['id'=>'detalle_0_valor_total','class' => 'form-control','readonly','data-row' => 0,'min' => 0]) !!}
+                                </div>
+                                <div class="col-xs-1">
+                                    </br><button id="add_detalle_oc" type="button" data-counter="1" class="btn btn-success btn-sm btn-round"><span class="glyphicon glyphicon-plus"></span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-4">
+                            {!! Form::label('solicita', 'Solicita', ['class' => 'awesome']) !!}
+                            {!! Form::text('solicita','',['class' => 'form-control','required' ]) !!}
+                        </div>
+                        <div class="col-xs-4">
+                            {!! Form::label('autoriza', 'Autoriza', ['class' => 'awesome']) !!}
+                            {!! Form::text('autoriza','',['class' => 'form-control' ,'required']) !!}
+                        </div>
+                        <div class="col-xs-4">
+                            {!! Form::label('revisa', 'revisa', ['class' => 'awesome']) !!}
+                            {!! Form::text('revisa','',['class' => 'form-control' ,'required']) !!}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            {!! Form::label('observacion', 'Observacion') !!}
+                            {!! Form::textArea('observacion','',['class' => 'form-control','rows' => 5,'required']) !!}
+                        </div>
+                    </div>
+                {!! Form::close() !!}
             </div>
         </div>
     </div>

@@ -3,60 +3,147 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <title>Listado Ordenes De Compra</title>
-        <link rel="stylesheet" href="pdf.css" type="text/css"/>
+        <link rel="stylesheet" href="/css/pdf.css" type="text/css"/>
+        {{--<link rel="stylesheet" href="/css/app.css" type="text/css"/>--}}
     </head>
     <body>
         <table>
-            <td style="text-align: left;">
-                <img src="img/logo_tomate_small.png" alt="logo tomate">
-            </td>
-            <td style="text-align: right;>
-                <img src="img/logo_cenade_small.png" alt="logo tomate">
-            </td>
+            <tr>
+                <td style="text-align: left;">
+                    <img src="img/logo_tomate_small.png" alt="logo tomate">
+                </td>
+                <td>
+                    <table class="table_head">
+                        <tr>
+                            <td> Dirección: </td>
+                            <td class="column_head"> xxxxxxxxxx </td>
+                            <td> Demandante: </td>
+                            <td> <b>TÓMATE</b> </td>
+                        </tr>
+                        <tr>
+                            <td> Télefono: </td>
+                            <td class="column_head"> xxxxxxxxxx </td>
+                            <td> Fecha Orden Compra: </td>
+                            <td> <b><?php echo $ordenCompra->created_at->format('d-m-Y'); ?></b> </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
         </table>
-        <table class="table table-striped table-bordered table-hover dataTable display compact nowrap table-condensed">
+        <table class="row_oc" style="width: 100%;">
+            <tr>
+                <td style="padding-right: 50px;"><b>OT N°: <?php echo $ordenCompra->id_proyecto; ?></b></td>
+                <td><b>ORDEN COMPRA</b>(Menor a 3 UTM): <b>N°</b> <?php echo $ordenCompra->id_proyecto; ?></td>
+            </tr>
+        </table>
+        <table style="width:100%;border: 5px black solid; border-collapse: collapse; margin-top: 10px;">
+            <tr>
+                <td>
+                    <table >
+                        <tr>
+                            <td>Señor (es):</td><td> <?php echo $proveedor->nombre; ?></td>
+                        </tr>
+                        <tr>
+                            <td>Dirección:</td><td> <?php echo $proveedor->direccion; ?></td>
+                        </tr>
+                        <tr>
+                            <td>Rut:</td><td> <?php echo $proveedor->rut; ?></td>
+                        </tr>
+                        <tr>
+                            <td>Email:</td><td> <?php echo $proveedor->email; ?></td>
+                        </tr>
+                        <tr>
+                            <td>Télefono:</td><td> <?php echo $proveedor->telefono; ?></td>
+                        </tr>
+                            <?php if($proveedor->telefono_movil): ?>
+                            <tr>
+                                <td>Télefono Movil:</td><td> <?php echo $proveedor->telefono_movil; ?></td>
+                            </tr>
+                            <?php endif; ?>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table style="width:100%;border: 5px black solid; border-collapse: collapse; margin-top: 10px;">
+            <tr>
+                <td>
+                    <table>
+                        <tr>
+                            <td><b>FORMA DE PAGO:</b></td><td> <?php echo $tipoPago; ?></td>
+                        </tr>
+                        <tr>
+                            <td><b>EMITIDA POR:</b></td><td> <?php echo $proveedor->direccion; ?></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table style="width:100%; border-collapse: collapse; margin-top: 10px;">
             <thead>
-                <th>Fecha</th>
-                <th>OC</th>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Proveedor</th>
-                <th>Valor Neto</th>
-                <th>IVA</th>
-                <th>Bruto</th>
-                <th>Cot1</th>
-                <th>Cot2</th>
-                <th>Cot3</th>
-                <th>Autorizada</th>
-                <th>Facturada</th>
-                <th>Fecha Fact</th>
-                <th>Comentario</th>
+                <tr style="border: 5px black solid;">
+                    <th style="border: 5px black solid;">CANTIDAD</th>
+                    <th style="border: 5px black solid;">DESCRIPCIÓN DEL PRODUCTO</th>
+                    <th style="border: 5px black solid;">PRECIO</th>
+                    <th style="border: 5px black solid;">VALOR</th>
+                </tr>
             </thead>
-            <tbody>
-                @forelse($ordenes as $orden)
-                    <tr>
-                        <td>{{ $orden->created_at }}</td>
-                        <td>{{ $orden->id_orden_compra }}</td>
-                        <td>{{ $orden->id_producto }}</td>
-                        <td>{{ $orden->cantidad }}</td>
-                        <td>{{ "proveedor" }}</td>
-                        <td>{{ $orden->valor_neto }}</td>
-                        <td>{{ $orden->iva }}</td>
-                        <td>{{ $orden->valor_bruto }}</td>
-                        <td>{{ $orden->cotizacion1 }}</td>
-                        <td>{{ $orden->cotizacion2 }}</td>
-                        <td>{{ $orden->cotizacion3 }}</td>
-                        <td>{{ $orden->autorizada }}</td>
-                        <td>{{ $orden->facturada }}</td>
-                        <td>{{ $orden->updated_at }}</td>
-                        <td>{{ $orden->comentario }}</td>
+            <colgroup span="1"></colgroup>
+            <colgroup span="1"></colgroup>
+            <colgroup span="1"></colgroup>
+            <colgroup span="1"></colgroup>
+            <tbody style="border: 5px black solid;">
+                <?php $subTotal = 0; ?>
+                @forelse($detalles as $detalle)
+                    <tr style="border: 5px black solid;">
+                        <td style="border-right: 5px black solid;text-align: right;">{{ $detalle->cantidad }}</td>
+                        <td style="border-right: 5px black solid;text-align: left;">{{ $detalle->item }}</td>
+                        <td style="border-right: 5px black solid;text-align: right;">{{ $detalle->valor_unitario }}</td>
+                        <td style="border-right: 5px black solid;text-align: right;">{{ $detalle->valor_total }}</td>
                     </tr>
+                    <?php $subTotal = $detalle->valor_total + $subTotal; ?>
                 @empty
                     <tr>
-                        <td colspan="13">No existen datos</td>
+                        <td colspan="4">No existen datos</td>
                     </tr>
                 @endforelse
             </tbody>
+                <tr>
+                    <td  colspan="2" style="border:0px !important;">
+                    </td>
+                    <td style="border: 5px black solid;">
+                        <table>
+                            <tr>
+                                <td>Neto</td>
+                            </tr>
+                            <tr>
+                                <td>IVA</td>
+                            </tr>
+                            <tr>
+                                <td><b>Total</b></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="border: 5px black solid;">
+                        <table>
+                            <tr>
+                                <td>{{$subTotal}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{$subTotal*0.19}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{$subTotal*1.19}}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+        </table>
+        <table>
+            <tr>
+                <td><b>Observaciones:</b></td>
+                <td>{{$ordenCompra->observacion}}</td>
+            </tr>
         </table>
     </body>
 </html>

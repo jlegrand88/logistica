@@ -28,7 +28,7 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
+                    <a class="navbar-brand" href="{{ url('/home') }}">
                         {{ config('app.name', 'Tomate') }}
                     </a>
                 </div>
@@ -76,6 +76,5 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/main.js') }}"></script>
 </body>
 </html>

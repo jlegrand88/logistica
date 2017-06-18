@@ -2,4 +2,47 @@ body{
     background-color:#CC10;
     font:14px Georgia, serif, calibri;
 }
+table{
+    margin-top: 15px;
+}
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 5px black solid;
+}
+.tabla_detalle_proveedor {
+    width: 100%;
+    border-collapse: collapse;
+    border: 5px black solid;
+    text-align: left;
+}
+.table th{
+    border: 5px black solid;
+}
+.table td{
+    text-align: right;
+    /*margin: 15px;*/
+    padding: 10px;
+}
+.descripcion{
+    text-align: left !important;
+}
+.table colgroup {
+    border: 5px black solid;
+}
+.row_oc td{
+    padding-right: 20px;
+}
+/*tbody {*/
+    /*border: 5px black solid;*/
+/*}*/
 
+.table_head {
+    padding: 100px 0px 0px 50px;
+}
+.table_head td{
+    padding: 10px;
+}
+.table_head .column_head{
+    padding-right: 200px;
+}
