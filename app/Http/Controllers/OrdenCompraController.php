@@ -257,58 +257,44 @@ class OrdenCompraController extends Controller
         $data = request()->all();
         $idOC = $data['cotizacion_id_orden_compra'];
         $ordenCompra = $this->ordenCompra->find($idOC);
+        $carpeta = 'uploads/cotizaciones';
+//        if (!file_exists($carpeta)) {
+//            @mkdir($carpeta, 0777, true);
+//        }
         if(request()->hasFile('cotizacion1'))
         {
             $cot1 = request()->file('cotizacion1');
-            $carpeta = '/uploads/cotizaciones/'.$idOC;
-            if (!file_exists($carpeta)) {
-                @mkdir($carpeta, 0777, true);
-            }
-            else
+            $extension = $cot1->guessExtension();
+            if(file_exists($carpeta.DIRECTORY_SEPARATOR.$idOC.'_cotizacion_1'))
             {
-                if(file_exists($carpeta.DIRECTORY_SEPARATOR.'cotizacion_1'))
-                {
-                    @unlink($carpeta.DIRECTORY_SEPARATOR.'cotizacion_1');
-                }
+                @unlink($carpeta.DIRECTORY_SEPARATOR.$idOC.'_cotizacion_1');
             }
-            $cot1->move($carpeta,'cotizacion_1');
-            $ordenCompra->cotizacion1 = $carpeta.DIRECTORY_SEPARATOR.'cotizacion_1';
+            $cot1->move($carpeta,$idOC.'_cotizacion_1.'.$extension);
+            $ordenCompra->cotizacion1 = $carpeta.DIRECTORY_SEPARATOR.$idOC.'_cotizacion_1.'.$extension;
         }
         if(request()->hasFile('cotizacion2'))
         {
-            $cot1 = request()->file('cotizacion2');
-            $carpeta = '/uploads/cotizaciones/'.$idOC;
-            if (!file_exists($carpeta)) {
-                @mkdir($carpeta, 0777, true);
-            }
-            else
+            $cot2 = request()->file('cotizacion2');
+            $extension = $cot2->guessExtension();
+            if(file_exists($carpeta.DIRECTORY_SEPARATOR.$idOC.'_cotizacion_2'))
             {
-                if(file_exists($carpeta.DIRECTORY_SEPARATOR.'cotizacion_2'))
-                {
-                    @unlink($carpeta.DIRECTORY_SEPARATOR.'cotizacion_2');
-                }
+                @unlink($carpeta.DIRECTORY_SEPARATOR.$idOC.'_cotizacion_2');
             }
-            $cot1->move($carpeta,'cotizacion_2');
-            $ordenCompra->cotizacion1 = $carpeta.DIRECTORY_SEPARATOR.'cotizacion_1';
+            $cot2->move($carpeta,$idOC.'_cotizacion_2.'.$extension);
+            $ordenCompra->cotizacion2 = $carpeta.DIRECTORY_SEPARATOR.$idOC.'_cotizacion_2.'.$extension;
         }
         if(request()->hasFile('cotizacion3'))
         {
-            $cot1 = request()->file('cotizacion3');
-            $carpeta = '/uploads/cotizaciones/'.$idOC;
-            if (!file_exists($carpeta)) {
-                @mkdir($carpeta, 0777, true);
-            }
-            else
+            $cot3 = request()->file('cotizacion3');
+            $extension = $cot3->guessExtension();
+            if(file_exists($carpeta.DIRECTORY_SEPARATOR.$idOC.'_cotizacion_3'))
             {
-                if(file_exists($carpeta.DIRECTORY_SEPARATOR.'cotizacion_3'))
-                {
-                    @unlink($carpeta.DIRECTORY_SEPARATOR.'cotizacion_3');
-                }
+                @unlink($carpeta.DIRECTORY_SEPARATOR.$idOC.'_cotizacion_3');
             }
-            $cot1->move($carpeta,'cotizacion_3');
-            $ordenCompra->cotizacion1 = $carpeta.DIRECTORY_SEPARATOR.'cotizacion_3';
+            $cot3->move($carpeta,$idOC.'_cotizacion_3.'.$extension);
+            $ordenCompra->cotizacion3 = $carpeta.DIRECTORY_SEPARATOR.$idOC.'_cotizacion_3.'.$extension;
         }
         $ordenCompra->save();
-        return response()->json(['responseText' => 'OK'],200);
+        return redirect()->route('home');
     }
 }

@@ -70,9 +70,21 @@
                         {data: 'valor_neto', name: 'Valor Neto'},
                         {data: 'iva', name: 'IVA'},
                         {data: 'bruto', name: 'Bruto'},
-                        {data: 'cotizacion1', name: 'Cot1'},
-                        {data: 'cotizacion2', name: 'Cot2'},
-                        {data: 'cotizacion3', name: 'Cot3'},
+                        {data: 'cotizacion1', name: 'Cot1', "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                                if(oData.cotizacion1) {
+                                    $(nTd).html("<a href='" + oData.cotizacion1 + "' target='_BLANK'>Cotizacion 1</a>");
+                                }
+                            }},
+                        {data: 'cotizacion2', name: 'Cot2', "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                            if(oData.cotizacion2) {
+                                $(nTd).html("<a href='" + oData.cotizacion2 + "' target='_BLANK'>Cotizacion 2</a>");
+                            }
+                        }},
+                        {data: 'cotizacion3', name: 'Cot3', "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                            if(oData.cotizacion3) {
+                                $(nTd).html("<a href='" + oData.cotizacion3 + "' target='_BLANK'>Cotizacion 3</a>");
+                            }
+                        }},
                         {data: 'autorizada', name: 'Autorizada'},
                         {data: 'facturada', name: 'Facturada'},
                         {data: 'fecha_facturacion', name: 'Fecha Fact'},
