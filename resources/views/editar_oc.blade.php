@@ -133,7 +133,7 @@
                                     </div>
                                     <div class="col-xs-1">
                                         {!! Form::label('detalle['.$loop->index.'][cantidad]', 'Cantidad') !!}
-                                        {!! Form::number('detalle['.$loop->index.'][cantidad]',$detalle->cantidad,['id'=>'detalle_'.$loop->index.'_cantidad','class' => 'form-control detalle_oc','required','data-row' => 0,'min' => 0]) !!}
+                                        {!! Form::number('detalle['.$loop->index.'][cantidad]',$detalle->cantidad,['id'=>'detalle_'.$loop->index.'_cantidad','class' => 'form-control detalle_oc','required','data-row' => $loop->index,'min' => 0]) !!}
                                     </div>
                                     <div class="col-xs-5">
                                         {!! Form::label('detalle['.$loop->index.'][item]', 'Item') !!}
@@ -141,11 +141,11 @@
                                     </div>
                                     <div class="col-xs-2">
                                         {!! Form::label('detalle['.$loop->index.'][valor_unitario]', 'Valor Unitario') !!}
-                                        {!! Form::number('detalle['.$loop->index.'][valor_unitario]',$detalle->valor_unitario,['id'=>'detalle_'.$loop->index.'_valor_unitario','class' => 'form-control detalle_oc','required','data-row' => 0,'min' => 0]) !!}
+                                        {!! Form::number('detalle['.$loop->index.'][valor_unitario]',$detalle->valor_unitario,['id'=>'detalle_'.$loop->index.'_valor_unitario','class' => 'form-control detalle_oc','required','data-row' => $loop->index,'min' => 0]) !!}
                                     </div>
                                     <div class="col-xs-2">
                                         {!! Form::label('detalle['.$loop->index.'][valor_total]', 'Valor Total') !!}
-                                        {!! Form::number('detalle['.$loop->index.'][valor_total]',$detalle->valor_total,['id'=>'detalle_'.$loop->index.'_valor_total','class' => 'form-control','readonly','data-row' => 0,'min' => 0]) !!}
+                                        {!! Form::number('detalle['.$loop->index.'][valor_total]',$detalle->valor_total,['id'=>'detalle_'.$loop->index.'_valor_total','class' => 'form-control','readonly','data-row' => $loop->index,'min' => 0]) !!}
                                     </div>
                                     @if($loop->index == 0)
                                         <div class="col-xs-1">

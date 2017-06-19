@@ -102,8 +102,8 @@ $('#is_new_proveedor').on('change',function (e)
 $(document).on('change','.detalle_oc',function (e)
 {
     var row = $(this).data('row');
+    console.log("row:"+row);
     var total = $('#detalle_'+row+'_cantidad').val() * $('#detalle_'+row+'_valor_unitario').val();
-    console.log($('#detalle_'+row+'_cantidad').val());
     $('#detalle_'+row+'_valor_total').val(total);
 });
 

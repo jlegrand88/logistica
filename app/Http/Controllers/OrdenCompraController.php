@@ -162,31 +162,40 @@ class OrdenCompraController extends Controller
         $idProyecto = $proyecto->id_proyecto;
         if(array_key_exists('id_orden_compra',$data) && $data['id_orden_compra'])
         {
-            $this->ordenCompra->find($data['id_orden_compra']);
+            $ordenCompra = OrdenCompra::find($data['id_orden_compra']);
+        }else{
+            $ordenCompra = new OrdenCompra();
         }
 
-        $this->ordenCompra->id_usuario = auth()->user()->id;
-        $this->ordenCompra->id_proyecto = $idProyecto;
-        $this->ordenCompra->id_proveedor = $idProveedor;
-        $this->ordenCompra->fecha_emision = $data['fecha_emision'];
-        $this->ordenCompra->id_tipo_pago = $data['id_tipo_pago'];
-        $this->ordenCompra->plazo_entrega = $data['plazo_entrega'];
+        $ordenCompra->id_usuario = auth()->user()->id;
+        $ordenCompra->id_proyecto = $idProyecto;
+        $ordenCompra->id_proveedor = $idProveedor;
+        $ordenCompra->fecha_emision = $data['fecha_emision'];
+        $ordenCompra->id_tipo_pago = $data['id_tipo_pago'];
+        $ordenCompra->plazo_entrega = $data['plazo_entrega'];
         if(array_key_exists('factura_exenta',$data)) {
-            $this->ordenCompra->factura_exenta = 1;
+            $ordenCompra->factura_exenta = 1;
         }else{
-            $this->ordenCompra->factura_exenta = 0;
+            $ordenCompra->factura_exenta = 0;
         }
-        $this->ordenCompra->solicita = $data['solicita'];
-        $this->ordenCompra->autoriza = $data['autoriza'];
-        $this->ordenCompra->revisa = $data['revisa'];
-        $this->ordenCompra->observacion = $data['observacion'];
-        $this->ordenCompra->save();
+        $ordenCompra->solicita = $data['solicita'];
+        $ordenCompra->autoriza = $data['autoriza'];
+        $ordenCompra->revisa = $data['revisa'];
+        $ordenCompra->observacion = $data['observacion'];
+        $ordenCompra->save();
 
         $detalles = $data['detalle'];
         foreach ($detalles as $detalle)
         {
-            $detalleOC = new DetalleOrdenCompra();
-            $detalleOC->id_orden_compra = $this->ordenCompra->id_orden_compra;
+            if(array_key_exists('id_detalle_orden_compra',$detalle) && $detalle['id_detalle_orden_compra'])
+            {
+                $detalleOC = DetalleOrdenCompra::find($detalle['id_detalle_orden_compra']);
+            }
+            else
+            {
+                $detalleOC = new DetalleOrdenCompra();
+            }
+            $detalleOC->id_orden_compra = $ordenCompra->id_orden_compra;
             $detalleOC->codigo = $detalle['codigo'];
             $detalleOC->cantidad = $detalle['cantidad'];
             $detalleOC->item = $detalle['item'];
