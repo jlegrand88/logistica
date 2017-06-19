@@ -126,11 +126,11 @@
                                     {!! Form::label('detalle[0][codigo]', 'Código') !!}
                                     {!! Form::text('detalle[0][codigo]','',['class' => 'form-control','required' ]) !!}
                                 </div>
-                                <div class="col-xs-1">
+                                <div class="col-xs-2">
                                     {!! Form::label('detalle[0][cantidad]', 'Cantidad') !!}
                                     {!! Form::number('detalle[0][cantidad]','',['id'=>'detalle_0_cantidad','class' => 'form-control detalle_oc','required','data-row' => 0,'min' => 0]) !!}
                                 </div>
-                                <div class="col-xs-5">
+                                <div class="col-xs-4">
                                     {!! Form::label('detalle[0][item]', 'Item') !!}
                                     {!! Form::text('detalle[0][item]','',['class' => 'form-control','required' ]) !!}
                                 </div>

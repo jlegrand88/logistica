@@ -94,11 +94,11 @@ class OrdenCompraController extends Controller
                         <label for="detalle['.$row.'][codigo]">Código</label>
                         <input required name="detalle['.$row.'][codigo]" type="text" value="" id="detalle['.$row.'][codigo]" class="form-control">
                     </div>
-                    <div class="col-xs-1">
+                    <div class="col-xs-2">
                         <label for="detalle['.$row.'][cantidad]">Cantidad</label>
                         <input required name="detalle['.$row.'][cantidad]" type="number" value="" id="detalle_'.$row.'_cantidad" data-row="'.$row.'" class="form-control detalle_oc">
                     </div>
-                    <div class="col-xs-5">
+                    <div class="col-xs-4">
                         <label for="detalle['.$row.'][item]">Item</label>
                         <input required name="detalle['.$row.'][item]" type="text" value="" id="detalle['.$row.'][item]" class="form-control">
                     </div>

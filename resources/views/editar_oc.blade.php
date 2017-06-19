@@ -131,11 +131,11 @@
                                         {!! Form::label('detalle['.$loop->index.'][codigo]', 'Código') !!}
                                         {!! Form::text('detalle['.$loop->index.'][codigo]',$detalle->codigo,['class' => 'form-control','required' ]) !!}
                                     </div>
-                                    <div class="col-xs-1">
+                                    <div class="col-xs-2">
                                         {!! Form::label('detalle['.$loop->index.'][cantidad]', 'Cantidad') !!}
                                         {!! Form::number('detalle['.$loop->index.'][cantidad]',$detalle->cantidad,['id'=>'detalle_'.$loop->index.'_cantidad','class' => 'form-control detalle_oc','required','data-row' => $loop->index,'min' => 0]) !!}
                                     </div>
-                                    <div class="col-xs-5">
+                                    <div class="col-xs-4">
                                         {!! Form::label('detalle['.$loop->index.'][item]', 'Item') !!}
                                         {!! Form::text('detalle['.$loop->index.'][item]',$detalle->item,['class' => 'form-control','required' ]) !!}
                                     </div>
