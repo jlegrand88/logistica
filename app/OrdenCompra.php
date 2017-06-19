@@ -17,6 +17,7 @@ class OrdenCompra extends Model
         $i = 0;
         foreach ($ocs as $oc)
         {
+            $response[$i]['codigo_proyecto'] = Proyecto::find($oc->id_proyecto)->codigo;
             $response[$i]['id_orden_compra'] = $oc->id_orden_compra;
             $response[$i]['created_at'] = $oc->created_at->format('d-m-Y');
             $response[$i]['proveedor'] = Proveedor::find($oc->id_proveedor)->nombre;

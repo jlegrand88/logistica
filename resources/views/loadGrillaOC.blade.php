@@ -8,6 +8,7 @@
         <div class="container-fluid">
             <table id="grilla_ordenes_compra" class="table table-striped table-bordered table-hover dataTable display compact nowrap table-condensed">
                 <thead>
+                    <th>Proyecto</th>
                     <th>Fecha</th>
                     <th>OC</th>
                     <th>Proveedor</th>
@@ -64,6 +65,7 @@
                     "select" : {style: 'single',items: 'row'},
                     "ajax": "{{ route('grilla_oc') }}",
                     "columns": [
+                        {data: 'codigo_proyecto', name: 'Proyecto'},
                         {data: 'created_at', name: 'Fecha'},
                         {data: 'id_orden_compra', name: 'OC'},
                         {data: 'proveedor', name: 'Proveedor'},

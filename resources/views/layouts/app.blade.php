@@ -1,3 +1,8 @@
+{{--
+created by: Javier Legrand
+contact to: javier.legrand@gmail.com
+WhatsApp:   +569941044521
+--}}
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>

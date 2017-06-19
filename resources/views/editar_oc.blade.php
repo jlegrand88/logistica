@@ -101,7 +101,7 @@
                         {{--TELÉFONO FIJO--}}
                         <div class="col-xs-4">
                             {!! Form::label('telefono_fijo', 'Teléfono Fijo', ['class' => 'awesome']) !!}
-                            {!! Form::number('telefono_fijo',$proveedor->telefono,['class' => 'form-control','required','maxlength' => 9 ]) !!}
+                            {!! Form::number('telefono_fijo',$proveedor->telefono,['class' => 'form-control','maxlength' => 9 ]) !!}
                         </div>
                     </div>
                     <div class="form-group">
@@ -171,13 +171,13 @@
                         </div>
                         <div class="col-xs-4">
                             {!! Form::label('revisa', 'revisa', ['class' => 'awesome']) !!}
-                            {!! Form::text('revisa',$ordenCompra->revisa,['class' => 'form-control' ,'required']) !!}
+                            {!! Form::text('revisa',$ordenCompra->revisa,['class' => 'form-control' ]) !!}
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-xs-12">
                             {!! Form::label('observacion', 'Observacion') !!}
-                            {!! Form::textArea('observacion',$ordenCompra->observacion,['class' => 'form-control','rows' => 5,'required']) !!}
+                            {!! Form::textArea('observacion',$ordenCompra->observacion,['class' => 'form-control','rows' => 5]) !!}
                         </div>
                     </div>
                 {!! Form::close() !!}

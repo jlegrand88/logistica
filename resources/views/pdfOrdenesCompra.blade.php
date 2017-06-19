@@ -1,3 +1,10 @@
+
+{{--
+created by: Javier Legrand
+contact to: javier.legrand@gmail.com
+WhatsApp:   +569941044521
+--}}
+
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -33,7 +40,7 @@
         <table class="row_oc" style="width: 100%;">
             <tr>
                 <td style="padding-right: 50px;"><b>OT N°: <?php echo $ordenCompra->id_proyecto; ?></b></td>
-                <td><b>ORDEN COMPRA</b>(Menor a 3 UTM): <b>N°</b> <?php echo $ordenCompra->id_proyecto; ?></td>
+                <td><b>ORDEN COMPRA</b>(Menor a 3 UTM): <b>N°</b> <?php echo $ordenCompra->id_orden_compra; ?></td>
             </tr>
         </table>
         <table style="width:100%;border: 5px black solid; border-collapse: collapse; margin-top: 10px;">
