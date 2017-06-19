@@ -105,8 +105,11 @@
                         $('#btn_upload_cotizacion').data('id',data.id_orden_compra);
                         $('#btn_upload_cotizacion').removeClass('disabled');
                         $('#btn_download_oc').data('id',data.id_orden_compra);
-                        $('#btn_download_oc').removeClass('disabled');
-                        $('#btn_download_oc').attr('href',"{{ url('/download_pdf_oc') }}?id="+data.id_orden_compra);
+                        if(data.autorizada == "SI")
+                        {
+                            $('#btn_download_oc').removeClass('disabled');
+                            $('#btn_download_oc').attr('href',"{{ url('/download_pdf_oc') }}?id="+data.id_orden_compra);
+                        }
                         $('#btn_autorizar_oc').data('id',data.id_orden_compra);
                         $('#btn_autorizar_oc').removeClass('disabled');
                     }
