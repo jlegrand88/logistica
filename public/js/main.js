@@ -5,6 +5,11 @@ $(document).ready(function (e) {
     $('#grilla_oc').html("<img src='/img/gears.gif' alt='Loading...'>");
     $('#grilla_oc').load('/load_grilla_oc');
     $('.dropdown-toggle').dropdown();
+
+    if(!$('#is_new_proveedor').is(':checked'))
+    {
+        bloquearProveedor();
+    }
 });
 
 $('#add_detalle_oc').on('click',function(e){
@@ -33,9 +38,21 @@ $(document).on('click','.delete_detalle_oc', function(e){
     countDetalle--;
     $('#add_detalle_oc').data('counter',countDetalle);
 });
+function bloquearProveedor() {
+    $("#nombre").attr('readonly',"readonly");
+    $("#direccion").attr('readonly',"readonly");
+    $("#rut").attr('readonly',"readonly");
+    $("#comuna").attr('readonly',"readonly");
+    $("#giro").attr('readonly',"readonly");
+    $("#email").attr('readonly',"readonly");
+    $("#telefono_movil").attr('readonly',"readonly");
+    $("#telefono_fijo").attr('readonly',"readonly");
+}
 
 $('#is_new_project').on('change',function (e)
 {
+    $('#codigo_proyecto').val('');
+    $('#id_proyecto').val('');
     var isChecked = $(this).is(':checked');
     if(isChecked)
     {
@@ -55,12 +72,13 @@ $('#is_new_project').on('change',function (e)
 });
 $('#is_new_proveedor').on('change',function (e)
 {
+    cleanProveedor();
+    $('#id_proveedor').val('');
     var isChecked = $(this).is(':checked');
     if(isChecked)
     {
         $('#container_id_proveedor').hide();
         $('#id_proveedor').removeAttr('required');
-        $('#id_proveedor').val('');
         $("#nombre").removeAttr('readonly');
         $("#direccion").removeAttr('readonly');
         $("#rut").removeAttr('readonly');
@@ -77,14 +95,7 @@ $('#is_new_proveedor').on('change',function (e)
         $('#id_proveedor').select2({
             placeholder: "Seleccione"
         });
-        $("#nombre").attr('readonly',"readonly");
-        $("#direccion").attr('readonly',"readonly");
-        $("#rut").attr('readonly',"readonly");
-        $("#comuna").attr('readonly',"readonly");
-        $("#giro").attr('readonly',"readonly");
-        $("#email").attr('readonly',"readonly");
-        $("#telefono_movil").attr('readonly',"readonly");
-        $("#telefono_fijo").attr('readonly',"readonly");
+        bloquearProveedor();
     }
 });
 
@@ -100,14 +111,7 @@ $('#id_proveedor').on('change',function (e) {
     var idProveedor = $(this).val();
     if(!idProveedor)
     {
-        $("#nombre").val('');
-        $("#direccion").val('');
-        $("#rut").val('');
-        $("#comuna").val('');
-        $("#giro").val('');
-        $("#email").val('');
-        $("#telefono_movil").val('');
-        $("#telefono_fijo").val('');
+        cleanProveedor();
     }
     else
     {
@@ -131,4 +135,13 @@ $('#id_proveedor').on('change',function (e) {
     }
 });
 
-
+function cleanProveedor() {
+    $("#nombre").val('');
+    $("#direccion").val('');
+    $("#rut").val('');
+    $("#comuna").val('');
+    $("#giro").val('');
+    $("#email").val('');
+    $("#telefono_movil").val('');
+    $("#telefono_fijo").val('');
+}

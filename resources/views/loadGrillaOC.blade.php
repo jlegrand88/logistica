@@ -86,7 +86,7 @@
                         var fila = indexes;
                         var data = oTable.rows( indexes ).data()[0];
                         console.log(data);
-                        $('#btn_edit_oc').data('id',data.id_orden_compra);
+                        $('#btn_edit_oc').attr('href',"{{ url('/editar_oc') }}?id="+data.id_orden_compra);
                         $('#btn_edit_oc').removeClass('disabled');
                         $('#btn_delete_oc').data('id',data.id_orden_compra);
                         $('#btn_delete_oc').removeClass('disabled');

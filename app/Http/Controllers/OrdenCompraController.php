@@ -55,6 +55,35 @@ class OrdenCompraController extends Controller
         }
         return view('ingresar_oc',['listaProyectos' => $listaProyectos, 'listaProveedores' => $listaProveedores, 'listaFormaPago' => $listaFormaPago]);
     }
+
+    public function editarOrdenCompra()
+    {
+        $data = request()->all();
+        $idOrdenCompra = $data['id'];
+        $ordenCompra = OrdenCompra::find($idOrdenCompra);
+        $proveedor = OrdenCompra::find($ordenCompra->id_proveedor);
+        $detalles = DetalleOrdenCompra::all()->where('id_orden_compra',$idOrdenCompra);
+
+        $proyectos = Proyecto::all();
+        $proveedores = Proveedor::all();
+        $tiposPago = TipoPago::all();
+        $listaProyectos = array();
+        $listaProveedores = array();
+        $listaFormaPago = array();
+        foreach ($proyectos as $proyecto)
+        {
+            $listaProyectos[$proyecto->id_proyecto] = $proyecto->codigo;
+        }
+        foreach ($proveedores as $proveedor)
+        {
+            $listaProveedores[$proveedor->id_proveedor] = $proveedor->rut;
+        }
+        foreach ($tiposPago as $tipoPago)
+        {
+            $listaFormaPago[$tipoPago->id_tipo_pago] = $tipoPago->descripcion;
+        }
+        return view('editar_oc',['listaProyectos' => $listaProyectos, 'listaProveedores' => $listaProveedores, 'listaFormaPago' => $listaFormaPago, 'ordenCompra' => $ordenCompra,'detalles' =>$detalles,'proveedor' =>$proveedor]);
+    }
     
     public function addDetalleOrdenCompra()
     {
@@ -131,6 +160,10 @@ class OrdenCompraController extends Controller
             $proyecto = Proyecto::find($data['id_proyecto']);
         }
         $idProyecto = $proyecto->id_proyecto;
+        if(array_key_exists('id_orden_compra',$data) && $data['id_orden_compra'])
+        {
+            $this->ordenCompra->find($data['id_orden_compra']);
+        }
 
         $this->ordenCompra->id_usuario = auth()->user()->id;
         $this->ordenCompra->id_proyecto = $idProyecto;
@@ -161,7 +194,7 @@ class OrdenCompraController extends Controller
             $detalleOC->valor_total = $detalle['valor_total'];
             $detalleOC->save();
         }
-        return view('home');
+        return redirect()->route('home');
     }
     /**
      * carga vista que contiene la grilla de oc's
@@ -170,7 +203,8 @@ class OrdenCompraController extends Controller
      */
     public function loadGrillaOrdenCompra()
     {
-        return view('loadGrillaOC');
+        $idAdmin = auth()->user()->id;
+        return view('loadGrillaOC',['isAdmin' => $idAdmin]);
     }
     
     /**
@@ -228,13 +262,13 @@ class OrdenCompraController extends Controller
             $cot1 = request()->file('cotizacion1');
             $carpeta = '/uploads/cotizaciones/'.$idOC;
             if (!file_exists($carpeta)) {
-                mkdir($carpeta, 0777, true);
+                @mkdir($carpeta, 0777, true);
             }
             else
             {
                 if(file_exists($carpeta.DIRECTORY_SEPARATOR.'cotizacion_1'))
                 {
-                    unlink($carpeta.DIRECTORY_SEPARATOR.'cotizacion_1');
+                    @unlink($carpeta.DIRECTORY_SEPARATOR.'cotizacion_1');
                 }
             }
             $cot1->move($carpeta,'cotizacion_1');
@@ -245,13 +279,13 @@ class OrdenCompraController extends Controller
             $cot1 = request()->file('cotizacion2');
             $carpeta = '/uploads/cotizaciones/'.$idOC;
             if (!file_exists($carpeta)) {
-                mkdir($carpeta, 0777, true);
+                @mkdir($carpeta, 0777, true);
             }
             else
             {
                 if(file_exists($carpeta.DIRECTORY_SEPARATOR.'cotizacion_2'))
                 {
-                    unlink($carpeta.DIRECTORY_SEPARATOR.'cotizacion_2');
+                    @unlink($carpeta.DIRECTORY_SEPARATOR.'cotizacion_2');
                 }
             }
             $cot1->move($carpeta,'cotizacion_2');
@@ -262,13 +296,13 @@ class OrdenCompraController extends Controller
             $cot1 = request()->file('cotizacion3');
             $carpeta = '/uploads/cotizaciones/'.$idOC;
             if (!file_exists($carpeta)) {
-                mkdir($carpeta, 0777, true);
+                @mkdir($carpeta, 0777, true);
             }
             else
             {
                 if(file_exists($carpeta.DIRECTORY_SEPARATOR.'cotizacion_3'))
                 {
-                    unlink($carpeta.DIRECTORY_SEPARATOR.'cotizacion_3');
+                    @unlink($carpeta.DIRECTORY_SEPARATOR.'cotizacion_3');
                 }
             }
             $cot1->move($carpeta,'cotizacion_3');

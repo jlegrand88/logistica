@@ -11,9 +11,9 @@
                             <div class="col-sm-2">
                                 <a id="btn_add_oc" href="{{ url('/ingresar_oc') }}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Crear OC</a>
                             </div>
-                            {{--<div class="col-sm-2">--}}
-                                {{--<a id="btn_edit_oc" href="{{ url('/editar_oc') }}" class="btn btn-primary disabled"><span class="glyphicon glyphicon-edit"></span> Editar OC</a>--}}
-                            {{--</div>--}}
+                            <div class="col-sm-2">
+                                <a id="btn_edit_oc" href="{{ url('/editar_oc') }}" class="btn btn-primary disabled"><span class="glyphicon glyphicon-edit"></span> Editar OC</a>
+                            </div>
                             <div class="col-sm-2">
                                 <button id="btn_delete_oc" type="button" class="btn btn-danger disabled"><span class="glyphicon glyphicon-ban-circle"> Anular OC</span></button>
                             </div>
@@ -23,9 +23,15 @@
                             <div class="col-sm-2">
                                 <a id="btn_download_oc" target="_blank" class="btn btn-info disabled" ><span class="glyphicon glyphicon-cloud-download"></span>  Descargar PDF</a>
                             </div>
-                            <div class="col-sm-2" >
-                                <button id="btn_autorizar_oc" type="button" class="btn btn-success disabled"><span class="glyphicon glyphicon-thumbs-up"></span> Autorizar</button>
-                            </div>
+                            @if($isAdmin)
+                                <div class="col-sm-2" >
+                                    <button id="btn_autorizar_oc" type="button" class="btn btn-success disabled"><span class="glyphicon glyphicon-thumbs-up"></span> Autorizar</button>
+                                </div>
+                            @else
+                                <div class="col-sm-2" hidden>
+                                    <button id="btn_autorizar_oc" type="button" class="btn btn-success disabled"><span class="glyphicon glyphicon-thumbs-up"></span> Autorizar</button>
+                                </div>
+                            @endif
                         </div>
                         <div id="grilla_oc"></div>
                     </div>

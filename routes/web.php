@@ -25,6 +25,7 @@ Route::get('/load_proveedor', 'OrdenCompraController@loadProveedor')->name('load
 Route::post('/procesar_oc', 'OrdenCompraController@procesarOrdenCompra')->name('procesar_oc');
 
 Route::get('/delete_oc', 'OrdenCompraController@deleteOrdenCompra')->name('delete_oc');
+Route::get('/editar_oc', 'OrdenCompraController@editarOrdenCompra')->name('editar_oc');
 Route::get('/autorizar_oc', 'OrdenCompraController@autorizarOrdenCompra')->name('autorizar_oc');
 Route::post('/upload_cotizacion', 'OrdenCompraController@uploadCotizacion')->name('upload_cotizacion');
 
