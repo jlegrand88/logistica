@@ -34,3 +34,9 @@ Route::post('/upload_cotizacion', 'OrdenCompraController@uploadCotizacion')->nam
 Route::get('/load_grilla_oc', 'OrdenCompraController@loadGrillaOrdenCompra')->name('load_grilla_oc');
 Route::get('/grilla_oc', 'OrdenCompraController@grillaOrdenCompra')->name('grilla_oc');
 Route::get('/download_pdf_oc', 'OrdenCompraController@downloadPDFOC')->name('download_pdf_oc');
+
+Route::get('/clear-cache', function() {
+    $exitCode = Artisan::call('cache:clear');
+    // return what you want
+    return "Cache is clean...";
+});

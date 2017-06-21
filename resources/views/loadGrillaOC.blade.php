@@ -57,7 +57,6 @@
                 };
                 var oTable = $('#grilla_ordenes_compra').DataTable({
                     "processing": true,
-                    "serverSide": true,
                     "paginate": true,
                     "scrollX": true,
                     "scrollY": 450,
@@ -91,8 +90,8 @@
                         {data: 'facturada', name: 'Facturada'},
                         {data: 'fecha_facturacion', name: 'Fecha Fact'},
                         {data: 'comentario', name: 'Comentario'}
-                    ]
-//                    "columnDefs":[{targets: [0], visible: false, searchable: false}]
+                    ],
+                    "columnDefs":[{targets: [0,1,2,3,10], visible: true, searchable: true}]
                 });
                 oTable.on( 'select', function (e, dt, type, indexes) {
                     if ( type === 'row' )
@@ -100,8 +99,10 @@
                         var fila = indexes;
                         var data = oTable.rows( indexes ).data()[0];
                         console.log(data);
-                        $('#btn_edit_oc').attr('href',"{{ url('/editar_oc') }}?id="+data.id_orden_compra);
-                        $('#btn_edit_oc').removeClass('disabled');
+                        if(data.autorizada == "NO") {
+                            $('#btn_edit_oc').attr('href', "{{ url('/editar_oc') }}?id=" + data.id_orden_compra);
+                            $('#btn_edit_oc').removeClass('disabled');
+                        }
                         $('#btn_delete_oc').data('id',data.id_orden_compra);
                         $('#btn_delete_oc').removeClass('disabled');
                         $('#btn_upload_cotizacion').data('id',data.id_orden_compra);
