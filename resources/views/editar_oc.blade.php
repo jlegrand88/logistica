@@ -18,8 +18,8 @@
                     <div class="form-group">
                         {{-- IS NEW PROYECTO? --}}
                         <div class="col-xs-4">
-                            {!! Form::checkbox('is_new_project',1, false,['id' => 'is_new_project']) !!}
-                            {!! Form::label('is_new_project', '¿Proyecto Nuevo?') !!}
+                            {{--{!! Form::checkbox('is_new_project',1, false,['id' => 'is_new_project']) !!}--}}
+                            {{--{!! Form::label('is_new_project', '¿Proyecto Nuevo?') !!}--}}
                         </div>
                         {{-- IS NEW PROVEEDOR ? --}}
                         <div class="col-xs-4">
@@ -123,7 +123,7 @@
                     <div class="panel panel-default">
                         <div id="container_detalle_oc" class="panel-body">
                             @foreach ($detalles as $detalle)
-                                <div class="form-group">
+                                <div class="form-group" id="detalle_oc_{{$loop->index}}">
                                     @if($detalle->id_detalle_orden_compra)
                                         {!! Form::hidden('detalle['.$loop->index.'][id_detalle_orden_compra]',$detalle->id_detalle_orden_compra,['class' => 'form-control','required' ]) !!}
                                     @endif
@@ -149,7 +149,7 @@
                                     </div>
                                     @if($loop->index == 0)
                                         <div class="col-xs-1">
-                                            </br><button id="add_detalle_oc" type="button" data-counter="1" class="btn btn-success btn-sm btn-round"><span class="glyphicon glyphicon-plus"></span></button>
+                                            </br><button id="add_detalle_oc" type="button" data-counter="{{count($detalles)}}" class="btn btn-success btn-sm btn-round"><span class="glyphicon glyphicon-plus"></span></button>
                                         </div>
                                     @else
                                         <div class="col-xs-1">

@@ -7,31 +7,56 @@
                 <div class="panel panel-info" id="container_grilla_oc">
                     <div class="panel-heading">Lista de Ordenes de Compra</div>
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-sm-2">
+                        <div>
+                            {{--<div class="col-sm-2">--}}
                                 <a id="btn_add_oc" href="{{ url('/ingresar_oc') }}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Crear OC</a>
-                            </div>
-                            <div class="col-sm-2">
-                                <a id="btn_edit_oc" href="{{ url('/editar_oc') }}" class="btn btn-primary disabled"><span class="glyphicon glyphicon-edit"></span> Editar OC</a>
-                            </div>
-                            <div class="col-sm-2">
-                                <button id="btn_delete_oc" type="button" class="btn btn-danger disabled"><span class="glyphicon glyphicon-ban-circle"> Anular OC</span></button>
-                            </div>
-                            <div class="col-sm-2">
+                            {{--</div>--}}
+                            {{--<div class="col-sm-2">--}}
                                 <button id="btn_upload_cotizacion" type="button" class="btn btn-warning disabled"><span class="glyphicon glyphicon-cloud-upload"></span>  Enlazar Cotización</button>
-                            </div>
-                            <div class="col-sm-2">
-                                <a id="btn_download_oc" target="_blank" class="btn btn-info disabled" ><span class="glyphicon glyphicon-cloud-download"></span>  Descargar PDF</a>
-                            </div>
-                            @if($isAdmin)
-                                <div class="col-sm-2" >
-                                    <button id="btn_autorizar_oc" type="button" class="btn btn-success disabled"><span class="glyphicon glyphicon-thumbs-up"></span> Autorizar</button>
-                                </div>
+                            {{--</div>--}}
+                            {{--<div class="col-sm-2">--}}
+                                <a id="btn_edit_oc" href="{{ url('/editar_oc') }}" class="btn btn-primary disabled"><span class="glyphicon glyphicon-edit"></span> Editar OC</a>
+                            {{--BTN ANULAR--}}
+                            @if(in_array(\App\Permiso::ANULAR,$permisos))
+                                <button id="btn_delete_oc" type="button" class="btn btn-danger disabled"><span class="glyphicon glyphicon-ban-circle"> Anular OC</span></button>
                             @else
-                                <div class="col-sm-2" hidden>
+                                <div hidden>
+                                    <button id="btn_delete_oc" type="button" class="btn btn-danger disabled"><span class="glyphicon glyphicon-ban-circle"> Anular OC</span></button>
+                                </div>
+                            @endif
+                            {{--BTN DESCARGAR PDF--}}
+                            {{--@if(in_array(\App\Permiso::DESCARGAR,$permisos))--}}
+                                <a id="btn_download_oc" target="_blank" class="btn btn-info disabled" ><span class="glyphicon glyphicon-cloud-download"></span>  Descargar PDF</a>
+                            {{--@else--}}
+                                {{--<div hidden>--}}
+                                    {{--<a id="btn_download_oc" target="_blank" class="btn btn-info disabled" ><span class="glyphicon glyphicon-cloud-download"></span>  Descargar PDF</a>--}}
+                                {{--</div>--}}
+                            {{--@endif--}}
+                            {{-- BTN AUTORIZAR--}}
+                            @if(in_array(\App\Permiso::AUTORIZAR,$permisos))
+                                <button id="btn_autorizar_oc" type="button" class="btn btn-success disabled"><span class="glyphicon glyphicon-thumbs-up"></span> Autorizar</button>
+                            @else
+                                <div hidden>
                                     <button id="btn_autorizar_oc" type="button" class="btn btn-success disabled"><span class="glyphicon glyphicon-thumbs-up"></span> Autorizar</button>
                                 </div>
                             @endif
+                            <a id="btn_download_reporte" target="_blank" class="btn btn-info" href="{{ url('download_reporte') }}"><span class="glyphicon glyphicon-cloud-download"></span> Descargar Reporte</a>
+                        </div>
+                        <div>
+                            <div class="search_column"></div>
+                            <div class="search_column"></div>
+                            <div class="search_column"></div>
+                            <div class="search_column"></div>
+                            <div class="search_column"></div>
+                            <div class="search_column"></div>
+                            <div class="search_column"></div>
+                            <div class="search_column"></div>
+                            <div class="search_column"></div>
+                            <div class="search_column"></div>
+                            <div class="search_column"></div>
+                            <div class="search_column"></div>
+                            <div class="search_column"></div>
+                            <div class="search_column"></div>
                         </div>
                         <div id="grilla_oc"></div>
                     </div>

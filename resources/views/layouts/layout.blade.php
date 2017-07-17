@@ -18,6 +18,7 @@ WhatsApp:   +569941044521
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -79,9 +80,11 @@ WhatsApp:   +569941044521
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-2">
-                    {{--<ul class="nav nav-pills">--}}
-                        {{--<li id="link_ingresar_oc" role="presentation"><a href="{{ url('/ingresar_oc') }}">Ingresar OC</a></li>--}}
-                    {{--</ul>--}}
+                    @if( in_array(\App\Permiso::ASIGNAR_PROYECTOS,$permisos) )
+                        <ul class="nav nav-pills">
+                            <li id="link_asignar_proyectos" role="presentation" class="btn btn-default"><a href="{{ url('/asignar_proyectos') }}">Asignar Proyectos</a></li>
+                        </ul>
+                    @endif
                 </div>
                 <div class="col-md-10">
                     @yield('content')
@@ -91,11 +94,10 @@ WhatsApp:   +569941044521
     </div>
 
     <!-- Scripts -->
-
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('DataTables/datatables.min.js') }}"></script>
-    {{--<script src="{{ asset('js/app.js') }}"></script>--}}
     <script src="{{ asset('js/main.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    @yield('scripts')
 </body>
 </html>

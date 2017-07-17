@@ -22,16 +22,22 @@ WhatsApp:   +569941044521
                 <td>
                     <table class="table_head">
                         <tr>
+                            <td> RUT: </td>
+                            <td class="column_head"> 76735770-2 </td>
+                            <td> Razón Social: </td>
+                            <td class="column_head"> Eventos Produccion Publicidad Tomate Limitada. </td>
+                        </tr>
+                        <tr>
                             <td> Dirección: </td>
-                            <td class="column_head"> xxxxxxxxxx </td>
+                            <td class="column_head"> Jorge VI #218 - #220 Las Condes </td>
                             <td> Demandante: </td>
                             <td> <b>TÓMATE</b> </td>
                         </tr>
                         <tr>
                             <td> Télefono: </td>
-                            <td class="column_head"> xxxxxxxxxx </td>
-                            <td> Fecha Orden Compra: </td>
-                            <td> <b><?php echo $ordenCompra->created_at->format('d-m-Y'); ?></b> </td>
+                            <td class="column_head"> +5629644020 </td>
+                            <td> Email: </td>
+                            <td class="column_head"> hola@somostomate.cl </td>
                         </tr>
                     </table>
                 </td>
@@ -40,7 +46,9 @@ WhatsApp:   +569941044521
         <table class="row_oc" style="width: 100%;">
             <tr>
                 <td style="padding-right: 50px;"><b>OT N°: <?php echo $ordenCompra->id_proyecto; ?></b></td>
-                <td><b>ORDEN COMPRA</b>(Menor a 3 UTM): <b>N°</b> <?php echo $ordenCompra->id_orden_compra; ?></td>
+                <td><b>ORDEN COMPRA</b>: <b>N°</b> <?php echo $ordenCompra->id_orden_compra; ?></td>
+                <td> <b>Fecha Orden Compra</b>: </td>
+                <td> <?php echo $ordenCompra->created_at->format('d-m-Y'); ?> </td>
             </tr>
         </table>
         <table style="width:100%;border: 5px black solid; border-collapse: collapse; margin-top: 10px;">

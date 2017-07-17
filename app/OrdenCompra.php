@@ -10,9 +10,16 @@ class OrdenCompra extends Model
     protected $primaryKey = 'id_orden_compra';
     protected $table = 'orden_compra';
 
-    public function listar()
+    public function listar($idUsuario)
     {
-        $ocs = $this::all();
+        $user = User::find($idUsuario);
+        if(in_array(Perfil::ADMIN,$user->getPerfiles())){
+            $ocs = $this::join('proyecto_usuarios','proyecto_usuarios.id_proyecto','=','orden_compra.id_proyecto')->get();
+        }else{
+            $ocs = $this::join('proyecto_usuarios','proyecto_usuarios.id_proyecto','=','orden_compra.id_proyecto')
+                ->where('proyecto_usuarios.id_usuario',$idUsuario)->get();
+        }
+
         $response = array();
         $i = 0;
         foreach ($ocs as $oc)

@@ -24,7 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $isAdmin = auth()->user()->is_admin;
-        return view('home',['isAdmin' => $isAdmin]);
+        $permisos = auth()->user()->getPermisos();
+        return view('home',['permisos' => $permisos]);
     }
 }

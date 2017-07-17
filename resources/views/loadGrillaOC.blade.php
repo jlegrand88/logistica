@@ -5,34 +5,64 @@
     </head>
     <body>
         </br>
-        <div class="container-fluid">
-            <table id="grilla_ordenes_compra" class="table table-striped table-bordered table-hover dataTable display compact nowrap table-condensed">
-                <thead>
-                    <th>Proyecto</th>
-                    <th>Fecha</th>
-                    <th>OC</th>
-                    <th>Proveedor</th>
-                    <th>Valor Neto</th>
-                    <th>IVA</th>
-                    <th>Bruto</th>
-                    <th>Cot1</th>
-                    <th>Cot2</th>
-                    <th>Cot3</th>
-                    <th>Autorizada</th>
-                    <th>Facturada</th>
-                    <th>Fecha Fact</th>
-                    <th>Comentario</th>
-                </thead>
-            </table>
-            </br>
-        </div>
+        <table id="grilla_ordenes_compra" class="table table-striped table-bordered table-hover dataTable display compact nowrap table-condensed">
+            <thead>
+                <th>Proyecto</th>
+                <th>Fecha</th>
+                <th>OC</th>
+                <th>Proveedor</th>
+                <th>Bruto</th>
+                <th>IVA</th>
+                <th>Valor Neto</th>
+                <th>Cot1</th>
+                <th>Cot2</th>
+                <th>Cot3</th>
+                <th>Autorizada</th>
+                <th>Facturada</th>
+                <th>Fecha Fact</th>
+                <th>Comentario</th>
+            </thead>
+            <tfoot>
+            <th>Proyecto</th>
+                <th>Fecha</th>
+                <th>OC</th>
+                <th>Proveedor</th>
+                <th>Bruto</th>
+                <th>IVA</th>
+                <th>Valor Neto</th>
+                <th>Cot1</th>
+                <th>Cot2</th>
+                <th>Cot3</th>
+                <th>Autorizada</th>
+                <th>Facturada</th>
+                <th>Fecha Fact</th>
+                <th>Comentario</th>
+            </tfoot>
+            <tbody>
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+            </tbody>
+        </table>
+        </br>
+        {{--</div>--}}
         <script type="text/javascript">
             $(document).ready(function() {
                 var spanish = {
                     "sProcessing":     "Procesando...",
                     "sLengthMenu":     "Mostrar _MENU_ registros",
-                    "sZeroRecords":    "No se encontraron resultados",
-                    "sEmptyTable":     "Ningún dato disponible en esta tabla",
+                    "sZeroRecords":    "<div style='text-align: left !important;'>No se encontraron resultados</div>",
+                    "sEmptyTable":     "<div style='text-align: left !important;'>Ningún dato disponible en esta tabla</div>",
                     "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
                     "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
                     "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
@@ -56,7 +86,7 @@
                     }
                 };
                 var oTable = $('#grilla_ordenes_compra').DataTable({
-                    "processing": true,
+                    "processing": false,
                     "paginate": true,
                     "scrollX": true,
                     "scrollY": 450,
@@ -68,9 +98,9 @@
                         {data: 'created_at', name: 'Fecha'},
                         {data: 'id_orden_compra', name: 'OC'},
                         {data: 'proveedor', name: 'Proveedor'},
-                        {data: 'valor_neto', name: 'Valor Neto'},
-                        {data: 'iva', name: 'IVA'},
                         {data: 'bruto', name: 'Bruto'},
+                        {data: 'iva', name: 'IVA'},
+                        {data: 'valor_neto', name: 'Valor Neto'},
                         {data: 'cotizacion1', name: 'Cot1', "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                                 if(oData.cotizacion1) {
                                     $(nTd).html("<a href='" + oData.cotizacion1 + "' target='_BLANK'>Cotizacion 1</a>");
@@ -91,14 +121,22 @@
                         {data: 'fecha_facturacion', name: 'Fecha Fact'},
                         {data: 'comentario', name: 'Comentario'}
                     ],
-                    "columnDefs":[{targets: [0,1,2,3,10], visible: true, searchable: true}]
+                    "columnDefs":[{targets: [0,1,2,3,10], visible: true, searchable: true}],
+                    fixedColumns: true,
+                    fixedHeader: {
+                        header: true,
+                        footer: true
+                    },
                 });
+
                 oTable.on( 'select', function (e, dt, type, indexes) {
                     if ( type === 'row' )
                     {
                         var fila = indexes;
                         var data = oTable.rows( indexes ).data()[0];
-                        console.log(data);
+
+                        var permisos = <?php echo json_encode($permisos); ?>;
+                        console.log(permisos);
                         if(data.autorizada == "NO") {
                             $('#btn_edit_oc').attr('href', "{{ url('/editar_oc') }}?id=" + data.id_orden_compra);
                             $('#btn_edit_oc').removeClass('disabled');
@@ -117,8 +155,28 @@
                         $('#btn_autorizar_oc').removeClass('disabled');
                     }
                 } );
+
                 oTable.on( 'deselect', function (e, dt, type, indexes) {
                     resetBtnsMovimientos();
+                } );
+
+
+                $('.dataTables_scroll .dataTables_scrollFootInner tfoot th').each( function () {
+                    var title = $('#grilla_ordenes_compra thead th').eq( $(this).index() ).text();
+                    $(this).html( '<input class="form-control input-sm" type="text" placeholder="Buscar '+title+'" />' );
+                } );
+
+                // Apply the search
+                oTable.columns().every( function () {
+                    var that = this;
+
+                    $( 'input', this.footer() ).on( 'keyup change', function () {
+                        if ( that.search() !== this.value ) {
+                            that
+                                    .search( this.value )
+                                    .draw();
+                        }
+                    } );
                 } );
             });
             function resetBtnsMovimientos() {

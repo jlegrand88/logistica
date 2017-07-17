@@ -26,4 +26,35 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function perfiles()
+    {
+        return $this->belongsToMany(Perfil::class,'perfil_usuario','id_usuario','id_perfil');
+    }
+
+    public function getPermisos()
+    {
+        $permisos = array();
+        $perfiles = $this->perfiles;
+//        die(var_dump($perfiles);
+        foreach ($perfiles as $perfil)
+        {
+            foreach ($perfil->permisos as $permiso)
+            {
+                $permisos[] = $permiso->id_permiso;
+            }
+        }
+        return $permisos;
+    }
+    
+    public function getPerfiles()
+    {
+        $response = array();
+        $perfiles = $this->perfiles;
+        foreach ($perfiles as $perfil)
+        {
+            $response[] = $perfil->id_perfil;
+        }
+        return $response;
+    }
 }

@@ -29,11 +29,14 @@ Route::get('/editar_oc', 'OrdenCompraController@editarOrdenCompra')->name('edita
 Route::get('/autorizar_oc', 'OrdenCompraController@autorizarOrdenCompra')->name('autorizar_oc');
 Route::post('/upload_cotizacion', 'OrdenCompraController@uploadCotizacion')->name('upload_cotizacion');
 
-
+Route::get('/asignar_proyectos', 'OrdenCompraController@asignarProyectos')->name('asignar_proyectos');
+Route::get('/load_usuarios_asignados', 'OrdenCompraController@loadUsuariosAsignados')->name('load_usuarios_asignados');
+Route::post('/procesar_asignar_proyectos', 'OrdenCompraController@procesarAsignarProyectos')->name('porcesar_asignar_proyectos');
 
 Route::get('/load_grilla_oc', 'OrdenCompraController@loadGrillaOrdenCompra')->name('load_grilla_oc');
 Route::get('/grilla_oc', 'OrdenCompraController@grillaOrdenCompra')->name('grilla_oc');
 Route::get('/download_pdf_oc', 'OrdenCompraController@downloadPDFOC')->name('download_pdf_oc');
+Route::get('/download_reporte', 'OrdenCompraController@downloadReporte')->name('download_reporte');
 
 Route::get('/clear-cache', function() {
     $exitCode = Artisan::call('cache:clear');

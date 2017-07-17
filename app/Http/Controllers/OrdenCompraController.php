@@ -6,13 +6,16 @@ use App\Http\Requests;
 use App\Proveedor;
 use App\Proyecto;
 use App\DetalleOrdenCompra;
+use App\ProyectoUsuarios;
 use App\TipoPago;
+use App\User;
 use Faker\Provider\DateTime;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 
 use App\OrdenCompra;
 use Illuminate\Support\Facades\Session;
+use Excel;
 
 
 class OrdenCompraController extends Controller
@@ -41,6 +44,7 @@ class OrdenCompraController extends Controller
         $listaProyectos = array();
         $listaProveedores = array();
         $listaFormaPago = array();
+        $permisos = auth()->user()->getPermisos();
         foreach ($proyectos as $proyecto)
         {
             $listaProyectos[$proyecto->id_proyecto] = $proyecto->codigo;
@@ -53,7 +57,7 @@ class OrdenCompraController extends Controller
         {
             $listaFormaPago[$tipoPago->id_tipo_pago] = $tipoPago->descripcion;
         }
-        return view('ingresar_oc',['listaProyectos' => $listaProyectos, 'listaProveedores' => $listaProveedores, 'listaFormaPago' => $listaFormaPago]);
+        return view('ingresar_oc',['listaProyectos' => $listaProyectos, 'listaProveedores' => $listaProveedores, 'listaFormaPago' => $listaFormaPago,'permisos' => $permisos]);
     }
 
     public function editarOrdenCompra()
@@ -64,6 +68,7 @@ class OrdenCompraController extends Controller
         $proveedor = OrdenCompra::find($ordenCompra->id_proveedor);
         $detalles = DetalleOrdenCompra::all()->where('id_orden_compra',$idOrdenCompra);
 
+        $permisos = auth()->user()->getPermisos();
         $proyectos = Proyecto::all();
         $proveedores = Proveedor::all();
         $tiposPago = TipoPago::all();
@@ -82,7 +87,7 @@ class OrdenCompraController extends Controller
         {
             $listaFormaPago[$tipoPago->id_tipo_pago] = $tipoPago->descripcion;
         }
-        return view('editar_oc',['listaProyectos' => $listaProyectos, 'listaProveedores' => $listaProveedores, 'listaFormaPago' => $listaFormaPago, 'ordenCompra' => $ordenCompra,'detalles' =>$detalles,'proveedor' =>$proveedor]);
+        return view('editar_oc',['listaProyectos' => $listaProyectos, 'listaProveedores' => $listaProveedores, 'listaFormaPago' => $listaFormaPago, 'ordenCompra' => $ordenCompra,'detalles' =>$detalles,'proveedor' =>$proveedor,'permisos'=>$permisos]);
     }
     
     public function addDetalleOrdenCompra()
@@ -212,8 +217,8 @@ class OrdenCompraController extends Controller
      */
     public function loadGrillaOrdenCompra()
     {
-        $idAdmin = auth()->user()->id;
-        return view('loadGrillaOC',['isAdmin' => $idAdmin]);
+        $permisos = auth()->user()->getPermisos();
+        return view('loadGrillaOC',['permisos' => $permisos]);
     }
     
     /**
@@ -223,7 +228,7 @@ class OrdenCompraController extends Controller
      */
     public function grillaOrdenCompra()
     {
-        $ordenes = $this->ordenCompra->listar();
+        $ordenes = $this->ordenCompra->listar(auth()->user()->id);
         return Datatables::of($ordenes)->make(true);
     }
 
@@ -305,5 +310,96 @@ class OrdenCompraController extends Controller
         }
         $ordenCompra->save();
         return redirect()->route('home');
+    }
+
+    public function downloadReporte(Request $request)
+    {
+        return Excel::create('Reporte_OC', function($excel)
+        {
+            $excel->sheet('New sheet', function($sheet)
+            {
+                $ordenCompra = new OrdenCompra();
+                $ordenes = $ordenCompra->listar(auth()->user()->id);
+//                var_dump($ordenes);die();
+                $sheet->loadView('downloadReporteOC');
+                $sheet->loadView('downloadReporteOC',array('ordenes' => $ordenes));
+            });
+        })->download('xlsx');
+    }
+    
+    public function asignarProyectos()
+    {
+        $data = request()->all();
+        $message = "";
+        if(array_key_exists("message",$data))
+        {
+            $message = $data['message'];
+        }
+        $proyectos = Proyecto::all();
+        $usuarios = User::all();
+        $listaProyectos = array();
+        $listaUsuarios = array();
+        foreach ($proyectos as $proyecto)
+        {
+            $listaProyectos[$proyecto->id_proyecto] = $proyecto->codigo;
+        }
+        foreach ($usuarios as $usuario)
+        {
+            $listaUsuarios[$usuario->id] = $usuario->email;
+        }
+        $permisos = auth()->user()->getPermisos();
+        return view('asignarProyectos',['proyectos' => $listaProyectos, 'usuarios' => $listaUsuarios, 'message' => $message,'permisos' => $permisos]);
+    }
+
+    public function procesarAsignarProyectos()
+    {
+        $data = request()->all();
+        $idProyecto = $data['id_proyecto'];
+        $proyectosAsignados = ProyectoUsuarios::where('id_proyecto',$idProyecto)->get();
+        //var_dump($proyectosAsignados);die;
+        if($proyectosAsignados)
+        {
+            ProyectoUsuarios::where('id_proyecto',$idProyecto)->delete();
+        }
+        $usuarios = $data['usuarios'];
+//        var_dump($usuarios);die();
+        foreach($usuarios as $usuario)
+        {
+            $proyectoUsuarios = new ProyectoUsuarios();
+            $proyectoUsuarios->id_proyecto =  $idProyecto;
+            $proyectoUsuarios->id_usuario =  $usuario;
+            $proyectoUsuarios->save();
+        }
+        return redirect()->route('asignar_proyectos',['message' => "Usuarios asignados correctamente!"]);
+    }
+
+    public function loadUsuariosAsignados()
+    {
+        $data = request()->all();
+        $idProyecto = $data['id_proyecto'];
+        $usuarios = User::all();
+        foreach ($usuarios as $usuario)
+        {
+            $listaUsuarios[$usuario->id] = $usuario->email;
+        }
+        $proyectoUsuarios = ProyectoUsuarios::where('id_proyecto',$idProyecto)->get();
+        $usuariosAsignados = array();
+        foreach ($proyectoUsuarios as $item)
+        {
+            $usuariosAsignados[] = $item->id_usuario;
+        }
+        $response = "<label for='usuarios'>Usuarios</label><select multiple id='usuarios' name='usuarios[]' required='required' class='form-control selec2' >";
+        foreach ($listaUsuarios as $key => $value)
+        {
+            if(in_array($key,$usuariosAsignados))
+            {
+                $response .= "<option value='".$key."' selected>".$value."</option>";
+            }
+            else{
+                $response .= "<option value='".$key."'>".$value."</option>";
+            }
+        }
+        $response .= "</select>";
+        return response()->json(['responseText' => $response], 200);
     }
 }
